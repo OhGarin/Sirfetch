@@ -1,0 +1,26 @@
+{
+  "name": "sirfetch",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Proyecto para la materia tópicos especiales de programación mayo 2026",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OhGarin/Proyecto-TopicosPRG-202625-Mel.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OhGarin/Proyecto-TopicosPRG-202625-Mel/issues"
+  },
+  "homepage": "https://github.com/OhGarin/Proyecto-TopicosPRG-202625-Mel#readme",
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "typescript": "^7.0.2"
+  }
+}
