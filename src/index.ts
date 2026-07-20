@@ -1,8 +1,3 @@
-/**
- * Función temporal de prueba para verificar que TypeScript compila.
- */
-export function saludar(nombre: string): string {
-  return `Hola, ${nombre}. sirfetch está funcionando.`;
-}
-
-console.log(saludar("mundo"));
+export { SirFetch } from "./client.js";
+export { SirFetchError } from "./errors.js";
+export type { SirFetchResponse } from "./types.js";
