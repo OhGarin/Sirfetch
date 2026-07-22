@@ -134,4 +134,15 @@ export class SirFetch {
       timeout
     );
   }
+
+  /**
+   * Realiza una petición HTTP DELETE a la URL indicada.
+   * @template T - El tipo de dato esperado en la respuesta.
+   * @param url - La URL del recurso que se desea eliminar.
+   * @param timeout - Tiempo máximo de espera en milisegundos (opcional).
+   * @returns Una promesa que resuelve con la respuesta procesada.
+   */
+  public async delete<T>(url: string, timeout?: number): Promise<SirFetchResponse<T>> {
+    return this.request<T>(url, { method: "DELETE" }, timeout);
+  }
 }
