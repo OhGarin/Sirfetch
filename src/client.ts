@@ -1,8 +1,20 @@
-import { SirFetchResponse } from "./types.js";
+import { SirFetchResponse, SirFetchConfig } from "./types.js";
 import { SirFetchError } from "./errors.js";
 const DEFAULT_TIMEOUT = 10000;
 
 export class SirFetch {
+
+  /** Configuración interna del cliente. */
+  private readonly config: SirFetchConfig;
+
+  /**
+   * Crea una instancia de SirFetch con la configuración proporcionada.
+   * @param config - Opciones de configuración del cliente (opcional).
+   */
+  constructor(config: SirFetchConfig = {}) {
+    this.config = config;
+  }
+
   /**
    * Realiza una petición HTTP genérica con soporte para tiempo de espera.
    * @template T - El tipo de dato esperado en la respuesta.
@@ -17,12 +29,22 @@ export class SirFetch {
     options: RequestInit,
     timeout: number = DEFAULT_TIMEOUT
   ): Promise<SirFetchResponse<T>> {
+    // Combina la baseURL configurada con la ruta recibida.
+    const fullUrl = this.config.baseURL ? `${this.config.baseURL}${url}` : url;
+
+    // Combina las cabeceras configuradas con las específicas de esta petición.
+    const mergedHeaders = {
+      ...this.config.headers,
+      ...(options.headers as Record<string, string>),
+    };
+
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     try {
-      const response = await fetch(url, {
+      const response = await fetch(fullUrl, {
         ...options,
+        headers: mergedHeaders,
         signal: controller.signal,
       });
 

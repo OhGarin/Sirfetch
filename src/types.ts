@@ -7,3 +7,16 @@ export interface SirFetchResponse<T> {
   status: number;
   ok: boolean;
 }
+
+/**
+ * Opciones de configuración para crear una instancia de SirFetch.
+ * Todas las propiedades son opcionales.
+ */
+export interface SirFetchConfig {
+  /** URL base que se antepondrá a las rutas de cada petición. */
+  baseURL?: string;
+  /** Tiempo máximo de espera por defecto, en milisegundos. */
+  timeout?: number;
+  /** Cabeceras que se incluirán en todas las peticiones. */
+  headers?: Record<string, string>;
+}
