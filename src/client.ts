@@ -62,4 +62,28 @@ export class SirFetch {
   public async get<T>(url: string, timeout?: number): Promise<SirFetchResponse<T>> {
     return this.request<T>(url, { method: "GET" }, timeout);
   }
+
+  /**
+   * Realiza una petición HTTP POST a la URL indicada, enviando datos en formato JSON.
+   * @template T - El tipo de dato esperado en la respuesta.
+   * @param url - La URL a la que se realizará la petición.
+   * @param body - Los datos que se enviarán en el cuerpo de la petición.
+   * @param timeout - Tiempo máximo de espera en milisegundos (opcional).
+   * @returns Una promesa que resuelve con la respuesta procesada.
+   */
+  public async post<T>(
+    url: string,
+    body: unknown,
+    timeout?: number
+  ): Promise<SirFetchResponse<T>> {
+    return this.request<T>(
+      url,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      },
+      timeout
+    );
+  }
 }
