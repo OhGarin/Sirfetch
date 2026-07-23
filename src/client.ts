@@ -1,6 +1,17 @@
 import { SirFetchResponse, SirFetchConfig } from "./types.js";
 import { SirFetchError } from "./errors.js";
 const DEFAULT_TIMEOUT = 10000;
+/** Tiempo de espera predeterminado entre reintentos en milisegundos. */
+const DEFAULT_RETRY_DELAY = 300;
+
+/**
+ * Pausa la ejecución durante un número determinado de milisegundos.
+ * @param ms - Milisegundos que se desea esperar.
+ * @returns Una promesa que se resuelve tras la espera.
+ */
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export class SirFetch {
 
@@ -38,41 +49,82 @@ export class SirFetch {
       ...(options.headers as Record<string, string>),
     };
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeout);
+    // Determina cuantos reintentos y cuanta espera usar con valores predeterminados.
+    const maxRetries = this.config.retries ?? 0;
+    const retryDelay = this.config.retryDelay ?? DEFAULT_RETRY_DELAY;
 
-    try {
-      const response = await fetch(fullUrl, {
-        ...options,
-        headers: mergedHeaders,
-        signal: controller.signal,
-      });
+    // Guarda el ultimo error para relanzarlo si se agotan los reintentos.
+    let lastError: unknown;
 
-      if (!response.ok) {
-        throw new SirFetchError(
-          `La petición falló con el estado ${response.status}`,
-          response.status
-        );
+    // Se intenta la petición con el intento inicial y los reintentos configurados.
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+      try {
+        const response = await fetch(fullUrl, {
+          ...options,
+          headers: mergedHeaders,
+          signal: controller.signal,
+        });
+
+        // Se lanza para reintentar los errores de servidor.
+        if (response.status >= 500) {
+          throw new SirFetchError(
+            `La petición falló con el estado ${response.status}`,
+            response.status
+          );
+        }
+
+        // Para otro tipo de error no se hace reintento.
+        if (!response.ok) {
+          throw new SirFetchError(
+            `La petición falló con el estado ${response.status}`,
+            response.status
+          );
+        }
+
+        const data = (await response.json()) as T;
+
+        return {
+          data,
+          status: response.status,
+          ok: response.ok,
+        };
+      } catch (error) {
+        clearTimeout(timeoutId);
+
+        // Si fue un timeout se escribe como error claro.
+        if (error instanceof Error && error.name === "AbortError") {
+          lastError = new SirFetchError(
+            `La petición excedió el tiempo de espera de ${timeout} ms`
+          );
+        } else {
+          lastError = error;
+        }
+
+        // Si es un error de cliente no reintenta, se relanza.
+        if (
+          error instanceof SirFetchError &&
+          error.status !== undefined &&
+          error.status >= 400 &&
+          error.status < 500
+        ) {
+          throw error;
+        }
+
+        // Si aun quedan reintentos espera y luego reintenta.
+        if (attempt < maxRetries) {
+          await delay(retryDelay);
+          continue;
+        }
+      } finally {
+        clearTimeout(timeoutId);
       }
-
-      const data = (await response.json()) as T;
-
-      return {
-        data,
-        status: response.status,
-        ok: response.ok,
-      };
-    } catch (error) {
-      if (error instanceof Error && error.name === "AbortError") {
-        throw new SirFetchError(
-          `La petición excedió el tiempo de espera de ${timeout} ms`
-        );
-      }
-      throw error;
-    } finally {
-      clearTimeout(timeoutId);
     }
+    throw lastError;
   }
+  
 
   /**
    * Realiza una petición HTTP GET a la URL indicada.

@@ -15,8 +15,12 @@ export interface SirFetchResponse<T> {
 export interface SirFetchConfig {
   /** URL base que se antepondrá a las rutas de cada petición. */
   baseURL?: string;
-  /** Tiempo máximo de espera por defecto, en milisegundos. */
+  /** Tiempo máximo de espera por defecto en milisegundos. */
   timeout?: number;
   /** Cabeceras que se incluirán en todas las peticiones. */
   headers?: Record<string, string>;
+  /** Número de reintentos ante fallos temporales. Predeterminado es un intento. */
+  retries?: number;
+  /** Milisegundos de espera entre reintentos. Predeterminado 300 ms. */
+  retryDelay?: number;
 }
