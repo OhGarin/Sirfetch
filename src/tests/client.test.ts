@@ -13,7 +13,7 @@ describe("SirFetch - método GET", () => {
   });
 
   // Test para verificar que un GET exitoso devuelve los datos esperados
-  test("realiza un GET exitoso y devuelve los datos", async () => {
+  test("Realiza un GET exitoso y devuelve los datos", async () => {
     const datosFalsos = { id: 1, title: "Post de prueba" };
     mockFetch.mockResolvedValue({
       ok: true,
@@ -33,7 +33,7 @@ describe("SirFetch - método GET", () => {
   });
 
   // Test para verificar que se lanza SirFetchError ante un 404
-  test("lanza SirFetchError cuando el servidor responde con 404", async () => {
+  test("Lanza SirFetchError cuando el servidor responde con 404", async () => {
     mockFetch.mockResolvedValue({
       ok: false,
       status: 404,
@@ -66,7 +66,7 @@ describe("SirFetch - método GET", () => {
   });
 
 // Test para verificar que se reintenta ante un error 500 (error de servidor)
-  test("reintenta ante un error 500", async () => {
+  test("Reintenta ante un error 500", async () => {
     mockFetch.mockResolvedValue({
       ok: false,
       status: 500,
@@ -88,7 +88,7 @@ describe("SirFetch - envío de datos y timeout", () => {
     mockFetch.mockReset();
   });
 
-  test("el método POST envía el cuerpo en formato JSON", async () => {
+  test("El método POST envía el cuerpo en formato JSON", async () => {
     const datosEnviados = { title: "Nuevo post", userId: 1 };
     mockFetch.mockResolvedValue({
       ok: true,
@@ -109,7 +109,7 @@ describe("SirFetch - envío de datos y timeout", () => {
     );
   });
 
-  test("lanza SirFetchError cuando se excede el tiempo de espera", async () => {
+  test("Lanza SirFetchError cuando se excede el tiempo de espera", async () => {
     // Se simula un fetch que nunca responde, pero que reacciona a la señal de aborto.
     mockFetch.mockImplementation(
       (_url: unknown, options: unknown) =>
