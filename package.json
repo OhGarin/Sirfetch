@@ -6,7 +6,9 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
   },
   "repository": {
     "type": "git",
@@ -20,7 +22,10 @@
   },
   "homepage": "https://github.com/OhGarin/Proyecto-TopicosPRG-202625-Mel#readme",
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^26.1.1",
-    "typescript": "^7.0.2"
+    "jest": "^30.4.2",
+    "ts-jest": "^29.4.12",
+    "typescript": "^6.0.3"
   }
 }
