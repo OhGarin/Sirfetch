@@ -1,4 +1,9 @@
-import { SirFetchResponse, SirFetchConfig } from "./types.js";
+import {
+  SirFetchResponse,
+  SirFetchConfig,
+  RequestInterceptor,
+  ResponseInterceptor,
+} from "./types.js";
 import { SirFetchError } from "./errors.js";
 const DEFAULT_TIMEOUT = 10000;
 /** Tiempo de espera predeterminado entre reintentos en milisegundos. */
@@ -17,6 +22,10 @@ export class SirFetch {
 
   /** Configuración interna del cliente. */
   private readonly config: SirFetchConfig;
+  /** Lista de interceptores que se ejecutan antes de cada petición. */
+  private readonly requestInterceptors: RequestInterceptor[] = [];
+  /** Lista de interceptores que se ejecutan después de cada respuesta. */
+  private readonly responseInterceptors: ResponseInterceptor[] = [];
 
   /**
    * Crea una instancia de SirFetch con la configuración proporcionada.
@@ -24,6 +33,22 @@ export class SirFetch {
    */
   constructor(config: SirFetchConfig = {}) {
     this.config = config;
+  }
+
+  /**
+   * Registra un interceptor que se ejecutará antes de cada petición.
+   * @param interceptor - Función que recibe y devuelve las opciones de la petición.
+   */
+  public addRequestInterceptor(interceptor: RequestInterceptor): void {
+    this.requestInterceptors.push(interceptor);
+  }
+
+  /**
+   * Registra un interceptor que se ejecutará después de cada respuesta exitosa.
+   * @param interceptor - Función que recibe y devuelve la respuesta procesada.
+   */
+  public addResponseInterceptor(interceptor: ResponseInterceptor): void {
+    this.responseInterceptors.push(interceptor);
   }
 
   /**
@@ -49,6 +74,12 @@ export class SirFetch {
       ...(options.headers as Record<string, string>),
     };
 
+    // Aplica los interceptores de petición en orden para modificar las opciones.
+    let finalOptions: RequestInit = { ...options, headers: mergedHeaders };
+    for (const interceptor of this.requestInterceptors) {
+      finalOptions = interceptor(finalOptions);
+    }
+
     // Determina cuantos reintentos y cuanta espera usar con valores predeterminados.
     const maxRetries = this.config.retries ?? 0;
     const retryDelay = this.config.retryDelay ?? DEFAULT_RETRY_DELAY;
@@ -63,20 +94,11 @@ export class SirFetch {
 
       try {
         const response = await fetch(fullUrl, {
-          ...options,
-          headers: mergedHeaders,
+          ...finalOptions,
           signal: controller.signal,
         });
 
-        // Se lanza para reintentar los errores de servidor.
-        if (response.status >= 500) {
-          throw new SirFetchError(
-            `La petición falló con el estado ${response.status}`,
-            response.status
-          );
-        }
-
-        // Para otro tipo de error no se hace reintento.
+        // Si la respuesta no es exitosa se lanza un error controlado.
         if (!response.ok) {
           throw new SirFetchError(
             `La petición falló con el estado ${response.status}`,
@@ -86,11 +108,17 @@ export class SirFetch {
 
         const data = (await response.json()) as T;
 
-        return {
+        // Se construye la respuesta y aplica los interceptores de respuesta en orden.
+        let result: SirFetchResponse<unknown> = {
           data,
           status: response.status,
           ok: response.ok,
         };
+        for (const interceptor of this.responseInterceptors) {
+          result = interceptor(result);
+        }
+
+        return result as SirFetchResponse<T>;
       } catch (error) {
         clearTimeout(timeoutId);
 
@@ -104,12 +132,7 @@ export class SirFetch {
         }
 
         // Si es un error de cliente no reintenta, se relanza.
-        if (
-          error instanceof SirFetchError &&
-          error.status !== undefined &&
-          error.status >= 400 &&
-          error.status < 500
-        ) {
+        if (this.isClientError(error)) {
           throw error;
         }
 
@@ -125,6 +148,20 @@ export class SirFetch {
     throw lastError;
   }
   
+  /**
+   * Determina si un error corresponde a un error de cliente (código 4xx),
+   * los cuales no deben reintentarse porque no son fallos temporales.
+   * @param error - El error a evaluar.
+   * @returns `true` si es un error de cliente.
+   */
+  private isClientError(error: unknown): boolean {
+    return (
+      error instanceof SirFetchError &&
+      error.status !== undefined &&
+      error.status >= 400 &&
+      error.status < 500
+    );
+  }
 
   /**
    * Realiza una petición HTTP GET a la URL indicada.

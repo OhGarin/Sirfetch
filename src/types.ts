@@ -24,3 +24,21 @@ export interface SirFetchConfig {
   /** Milisegundos de espera entre reintentos. Predeterminado 300 ms. */
   retryDelay?: number;
 }
+
+/**
+ * Interceptor que se ejecuta antes de cada petición.
+ * Recibe las opciones de la petición y puede modificarlas antes de enviarlas.
+ * @param options - Las opciones de la petición (método, cabeceras, cuerpo, etc.).
+ * @returns Las opciones modificadas.
+ */
+export type RequestInterceptor = (options: RequestInit) => RequestInit;
+
+/**
+ * Interceptor que se ejecuta después de cada respuesta exitosa.
+ * Recibe la respuesta procesada y puede inspeccionarla o transformarla.
+ * @param response - La respuesta procesada por sirfetch.
+ * @returns La respuesta modificada.
+ */
+export type ResponseInterceptor = (
+  response: SirFetchResponse<unknown>
+) => SirFetchResponse<unknown>;
