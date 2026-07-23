@@ -48,7 +48,7 @@ describe("SirFetch - método GET", () => {
   });
 
   // Test para verificar que no se reintenta ante un error 404 (error de cliente)
-  test("No reintenta ante un error 404 (error de cliente)", async () => {
+  test("No reintenta ante un error 404", async () => {
     mockFetch.mockResolvedValue({
       ok: false,
       status: 404,
@@ -66,7 +66,7 @@ describe("SirFetch - método GET", () => {
   });
 
 // Test para verificar que se reintenta ante un error 500 (error de servidor)
-  test("reintenta ante un error 500 (error de servidor)", async () => {
+  test("reintenta ante un error 500", async () => {
     mockFetch.mockResolvedValue({
       ok: false,
       status: 500,
@@ -125,7 +125,6 @@ describe("SirFetch - envío de datos y timeout", () => {
 
     const cliente = new SirFetch();
 
-    // Con un timeout muy corto (10 ms), la petición debe cancelarse.
     await expect(
       cliente.get("https://ejemplo.com/lento", 10)
     ).rejects.toThrow(SirFetchError);
