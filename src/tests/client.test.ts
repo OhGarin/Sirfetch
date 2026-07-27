@@ -130,3 +130,111 @@ describe("SirFetch - envío de datos y timeout", () => {
     ).rejects.toThrow(SirFetchError);
   });
 });
+
+describe("SirFetch - metodos PUT, PATCH y DELETE", () => {
+  beforeEach(() => {
+    mockFetch.mockReset();
+  });
+
+  test("el metodo PUT envía el método correcto y el cuerpo en JSON", async () => {
+    const datos = { id: 1, title: "Actualizado" };
+    mockFetch.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => datos,
+    } as never);
+
+    const cliente = new SirFetch();
+    await cliente.put("https://ejemplo.com/posts/1", datos);
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://ejemplo.com/posts/1",
+      expect.objectContaining({
+        method: "PUT",
+        body: JSON.stringify(datos),
+      })
+    );
+  });
+
+  test("el metodo PATCH envia el metodo correcto y el cuerpo en JSON", async () => {
+    const datos = { title: "Solo el título" };
+    mockFetch.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => datos,
+    } as never);
+
+    const cliente = new SirFetch();
+    await cliente.patch("https://ejemplo.com/posts/1", datos);
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://ejemplo.com/posts/1",
+      expect.objectContaining({
+        method: "PATCH",
+        body: JSON.stringify(datos),
+      })
+    );
+  });
+
+  test("el metodo DELETE envía el metodo correcto", async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({}),
+    } as never);
+
+    const cliente = new SirFetch();
+    await cliente.delete("https://ejemplo.com/posts/1");
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://ejemplo.com/posts/1",
+      expect.objectContaining({ method: "DELETE" })
+    );
+  });
+});
+
+describe("SirFetch - interceptores", () => {
+  beforeEach(() => {
+    mockFetch.mockReset();
+  });
+
+  test("ejecuta un interceptor de petición registrado", async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({}),
+    } as never);
+
+    const cliente = new SirFetch();
+    let interceptorEjecutado = false;
+
+    cliente.addRequestInterceptor((opciones) => {
+      interceptorEjecutado = true;
+      return opciones;
+    });
+
+    await cliente.get("https://ejemplo.com/recurso");
+
+    expect(interceptorEjecutado).toBe(true);
+  });
+
+  test("ejecuta un interceptor de respuesta registrado", async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ valor: 1 }),
+    } as never);
+
+    const cliente = new SirFetch();
+    let statusRecibido = 0;
+
+    cliente.addResponseInterceptor((respuesta) => {
+      statusRecibido = respuesta.status;
+      return respuesta;
+    });
+
+    await cliente.get("https://ejemplo.com/recurso");
+
+    expect(statusRecibido).toBe(200);
+  });
+});
