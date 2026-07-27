@@ -109,7 +109,10 @@ export class SirFetch {
           );
         }
 
-        const data = (await response.json()) as T;
+        // Un 204 sin contenido.
+        const data = (
+          response.status === 204 ? null : await response.json()
+        ) as T;
 
         // Se construye la respuesta y aplica los interceptores de respuesta en orden.
         let result: SirFetchResponse<unknown> = {
@@ -123,7 +126,6 @@ export class SirFetch {
 
         return result as SirFetchResponse<T>;
       } catch (error) {
-        clearTimeout(timeoutId);
 
         // Si fue un timeout se escribe como error claro.
         if (error instanceof Error && error.name === "AbortError") {

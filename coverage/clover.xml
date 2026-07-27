@@ -1,54 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1785114772819" clover="3.2.0">
-  <project timestamp="1785114772819" name="All files">
-    <metrics statements="49" coveredstatements="49" conditionals="24" coveredconditionals="23" methods="14" coveredmethods="14" elements="87" coveredelements="86" complexity="0" loc="49" ncloc="49" packages="1" files="2" classes="2"/>
+<coverage generated="1785119212719" clover="3.2.0">
+  <project timestamp="1785119212720" name="All files">
+    <metrics statements="48" coveredstatements="48" conditionals="26" coveredconditionals="25" methods="14" coveredmethods="14" elements="88" coveredelements="87" complexity="0" loc="48" ncloc="48" packages="1" files="2" classes="2"/>
     <file name="client.ts" path="D:\Windows\melis\Documentos\Melis\Topicos program\Proyecto2026\Proyecto-TopicosPRG-202625-Mel\src\client.ts">
-      <metrics statements="45" coveredstatements="45" conditionals="24" coveredconditionals="23" methods="13" coveredmethods="13"/>
+      <metrics statements="44" coveredstatements="44" conditionals="26" coveredconditionals="25" methods="13" coveredmethods="13"/>
       <line num="8" count="1" type="stmt"/>
       <line num="10" count="1" type="stmt"/>
       <line num="18" count="2" type="stmt"/>
-      <line num="26" count="12" type="stmt"/>
-      <line num="28" count="12" type="stmt"/>
-      <line num="35" count="12" type="stmt"/>
+      <line num="26" count="13" type="stmt"/>
+      <line num="28" count="13" type="stmt"/>
+      <line num="35" count="13" type="stmt"/>
       <line num="43" count="1" type="stmt"/>
       <line num="51" count="1" type="stmt"/>
-      <line num="69" count="12" type="cond" truecount="1" falsecount="1"/>
-      <line num="72" count="12" type="stmt"/>
-      <line num="78" count="12" type="cond" truecount="3" falsecount="0"/>
-      <line num="81" count="12" type="stmt"/>
-      <line num="82" count="12" type="stmt"/>
+      <line num="69" count="13" type="cond" truecount="1" falsecount="1"/>
+      <line num="72" count="13" type="stmt"/>
+      <line num="78" count="13" type="cond" truecount="3" falsecount="0"/>
+      <line num="81" count="13" type="stmt"/>
+      <line num="82" count="13" type="stmt"/>
       <line num="83" count="1" type="stmt"/>
-      <line num="87" count="12" type="cond" truecount="2" falsecount="0"/>
-      <line num="88" count="12" type="cond" truecount="2" falsecount="0"/>
-      <line num="94" count="12" type="stmt"/>
-      <line num="95" count="14" type="stmt"/>
-      <line num="96" count="14" type="stmt"/>
-      <line num="98" count="14" type="stmt"/>
-      <line num="99" count="14" type="stmt"/>
-      <line num="105" count="12" type="cond" truecount="2" falsecount="0"/>
+      <line num="87" count="13" type="cond" truecount="2" falsecount="0"/>
+      <line num="88" count="13" type="cond" truecount="2" falsecount="0"/>
+      <line num="94" count="13" type="stmt"/>
+      <line num="95" count="15" type="stmt"/>
+      <line num="96" count="15" type="stmt"/>
+      <line num="98" count="15" type="stmt"/>
+      <line num="99" count="15" type="stmt"/>
+      <line num="105" count="13" type="cond" truecount="2" falsecount="0"/>
       <line num="106" count="5" type="stmt"/>
-      <line num="112" count="7" type="stmt"/>
-      <line num="115" count="7" type="stmt"/>
-      <line num="120" count="7" type="stmt"/>
-      <line num="121" count="1" type="stmt"/>
-      <line num="124" count="7" type="stmt"/>
-      <line num="126" count="7" type="stmt"/>
-      <line num="129" count="7" type="cond" truecount="4" falsecount="0"/>
-      <line num="130" count="2" type="stmt"/>
-      <line num="134" count="5" type="stmt"/>
-      <line num="138" count="7" type="cond" truecount="2" falsecount="0"/>
-      <line num="139" count="2" type="stmt"/>
-      <line num="143" count="5" type="cond" truecount="2" falsecount="0"/>
-      <line num="144" count="2" type="stmt"/>
-      <line num="145" count="2" type="stmt"/>
-      <line num="148" count="14" type="stmt"/>
-      <line num="151" count="3" type="stmt"/>
-      <line num="161" count="7" type="stmt"/>
-      <line num="177" count="8" type="stmt"/>
-      <line num="193" count="1" type="stmt"/>
-      <line num="217" count="1" type="stmt"/>
-      <line num="241" count="1" type="stmt"/>
-      <line num="260" count="1" type="stmt"/>
+      <line num="114" count="8" type="cond" truecount="2" falsecount="0"/>
+      <line num="118" count="8" type="stmt"/>
+      <line num="123" count="8" type="stmt"/>
+      <line num="124" count="1" type="stmt"/>
+      <line num="127" count="8" type="stmt"/>
+      <line num="131" count="7" type="cond" truecount="4" falsecount="0"/>
+      <line num="132" count="2" type="stmt"/>
+      <line num="136" count="5" type="stmt"/>
+      <line num="140" count="7" type="cond" truecount="2" falsecount="0"/>
+      <line num="141" count="2" type="stmt"/>
+      <line num="145" count="5" type="cond" truecount="2" falsecount="0"/>
+      <line num="146" count="2" type="stmt"/>
+      <line num="147" count="2" type="stmt"/>
+      <line num="150" count="15" type="stmt"/>
+      <line num="153" count="3" type="stmt"/>
+      <line num="163" count="7" type="stmt"/>
+      <line num="179" count="8" type="stmt"/>
+      <line num="195" count="1" type="stmt"/>
+      <line num="219" count="1" type="stmt"/>
+      <line num="243" count="1" type="stmt"/>
+      <line num="262" count="2" type="stmt"/>
     </file>
     <file name="errors.ts" path="D:\Windows\melis\Documentos\Melis\Topicos program\Proyecto2026\Proyecto-TopicosPRG-202625-Mel\src\errors.ts">
       <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
