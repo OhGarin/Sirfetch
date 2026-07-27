@@ -2,26 +2,34 @@
   "name": "sirfetch",
   "version": "1.0.0",
   "type": "module",
-  "description": "Proyecto para la materia tópicos especiales de programación mayo 2026",
+  "description": "Cliente HTTP ligero, resiliente y tipado para realizar peticiones a APIs.",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
-    "example": "tsx example.ts"
+    "example": "tsx example.ts",
+    "prepare": "tsc"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OhGarin/Proyecto-TopicosPRG-202625-Mel.git"
+    "url": "git+https://github.com/OhGarin/Sirfetch.git"
   },
-  "keywords": [],
+  "keywords": [
+    "http",
+    "fetch",
+    "client",
+    "typescript",
+    "api"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/OhGarin/Proyecto-TopicosPRG-202625-Mel/issues"
+    "url": "https://github.com/OhGarin/Sirfetch/issues"
   },
-  "homepage": "https://github.com/OhGarin/Proyecto-TopicosPRG-202625-Mel#readme",
+  "homepage": "https://github.com/OhGarin/Sirfetch#readme",
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^26.1.1",
