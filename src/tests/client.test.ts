@@ -129,6 +129,28 @@ describe("SirFetch - envío de datos y timeout", () => {
       cliente.get("https://ejemplo.com/lento", 10)
     ).rejects.toThrow(SirFetchError);
   });
+
+  test("aplica el timeout definido en la configuración del cliente", async () => {
+    mockFetch.mockImplementation(
+      (_url: unknown, options: unknown) =>
+        new Promise((_resolve, reject) => {
+          const signal = (options as { signal: AbortSignal }).signal;
+          signal.addEventListener("abort", () => {
+            const error = new Error("Aborted");
+            error.name = "AbortError";
+            reject(error);
+          });
+        })
+    );
+
+    // El timeout se define en la configuración, no por llamada.
+    const cliente = new SirFetch({ timeout: 10 });
+
+    await expect(cliente.get("https://ejemplo.com/lento")).rejects.toThrow(
+      SirFetchError
+    );
+  });
+
 });
 
 describe("SirFetch - metodos PUT, PATCH y DELETE", () => {
