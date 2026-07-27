@@ -34,6 +34,18 @@ Un cliente HTTP ligero, resiliente y tipado para realizar peticiones a APIs.
 
 ## Instalación
 
+### Para usar la librería en tu proyecto
+
+Instala sirfetch como dependencia directamente desde el repositorio:
+
+```bash
+npm install OhGarin/Sirfetch
+```
+
+La librería se compila automáticamente durante la instalación, por lo que queda lista para importarse.
+
+### Para desarrollar o contribuir
+
 Clona el repositorio e instala las dependencias de desarrollo:
 
 ```bash
@@ -49,6 +61,8 @@ npm run build
 ```
 
 ## Integración en un proyecto
+
+> **Requisito del entorno:** sirfetch se distribuye como módulo ES. Tu proyecto debe estar configurado para usar módulos ES, con `"type": "module"` en su `package.json`. Si usas TypeScript, se recomienda configurar `"module"` y `"moduleResolution"` como `"nodenext"` en tu `tsconfig.json`.
 
 Importa la clase principal `SirFetch` y crea una instancia. De forma opcional, puedes pasarle una configuración inicial:
 
