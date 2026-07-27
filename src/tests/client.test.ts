@@ -213,6 +213,23 @@ describe("SirFetch - metodos PUT, PATCH y DELETE", () => {
       expect.objectContaining({ method: "DELETE" })
     );
   });
+
+  test("maneja una respuesta 204 sin contenido sin lanzar error", async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      status: 204,
+      json: async () => {
+        throw new Error("No debería llamarse json() en un 204");
+      },
+    } as never);
+
+    const cliente = new SirFetch();
+    const respuesta = await cliente.delete("https://ejemplo.com/posts/1");
+
+    expect(respuesta.status).toBe(204);
+    expect(respuesta.ok).toBe(true);
+  });
+
 });
 
 describe("SirFetch - interceptores", () => {
