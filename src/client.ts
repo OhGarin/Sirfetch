@@ -63,7 +63,7 @@ export class SirFetch {
   private async request<T>(
     url: string,
     options: RequestInit,
-    timeout: number = DEFAULT_TIMEOUT
+    timeout?: number
   ): Promise<SirFetchResponse<T>> {
     // Combina la baseURL configurada con la ruta recibida.
     const fullUrl = this.config.baseURL ? `${this.config.baseURL}${url}` : url;
@@ -73,6 +73,9 @@ export class SirFetch {
       ...this.config.headers,
       ...(options.headers as Record<string, string>),
     };
+
+    // Resuelve el timeout con prioridad: parámetro por llamada, luego configuración, luego valor por defecto.
+    const finalTimeout = timeout ?? this.config.timeout ?? DEFAULT_TIMEOUT;
 
     // Aplica los interceptores de petición en orden para modificar las opciones.
     let finalOptions: RequestInit = { ...options, headers: mergedHeaders };
@@ -90,7 +93,7 @@ export class SirFetch {
     // Se intenta la petición con el intento inicial y los reintentos configurados.
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), timeout);
+      const timeoutId = setTimeout(() => controller.abort(), finalTimeout);
 
       try {
         const response = await fetch(fullUrl, {
@@ -125,7 +128,7 @@ export class SirFetch {
         // Si fue un timeout se escribe como error claro.
         if (error instanceof Error && error.name === "AbortError") {
           lastError = new SirFetchError(
-            `La petición excedió el tiempo de espera de ${timeout} ms`
+            `La petición excedió el tiempo de espera de ${finalTimeout} ms`
           );
         } else {
           lastError = error;
